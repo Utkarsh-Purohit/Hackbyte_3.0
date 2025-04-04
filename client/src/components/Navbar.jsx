@@ -36,15 +36,12 @@ const Navbar = () => {
                 </svg>
               </button>
               <div className="ml-3 relative">
-                <div>
+                <Link to="/settings">
                   <button className="max-w-xs flex items-center text-sm rounded-full focus:outline-none">
                     <img className="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="User profile" />
                   </button>
-                </div>
+                </Link>
               </div>
-              <Link to="/settings" className="ml-4 px-3 py-1 rounded-md text-sm font-medium bg-indigo-700 hover:bg-indigo-800 transition duration-300">
-                Settings
-              </Link>
             </div>
           </div>
         </div>

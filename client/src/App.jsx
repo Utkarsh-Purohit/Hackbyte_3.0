@@ -14,6 +14,7 @@ function App() {
       <div className="min-h-screen bg-gray-50">
         <Navbar />
         <Routes>
+          <Route path="/" element={<PatientDashboard />} />
           <Route path="/patient" element={<PatientDashboard />} />
           <Route path="/doctor" element={<DoctorDashboard />} />
           <Route path="/reports" element={<Reports />} />
