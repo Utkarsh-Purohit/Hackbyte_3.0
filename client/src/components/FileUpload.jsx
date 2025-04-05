@@ -13,9 +13,8 @@ const FileUpload = ({ patientId }) => {
     const selectedFile = e.target.files[0];
     if (!selectedFile) return;
 
-    // Validate file type and size
     const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    const maxSize = 10 * 1024 * 1024;
 
     if (!validTypes.includes(selectedFile.type)) {
       setError('Only JPG, PNG, and PDF files are allowed');
@@ -45,7 +44,7 @@ const FileUpload = ({ patientId }) => {
 
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/reports/upload', 
+        'http://localhost:5000/api/reports/upload',
         formData,
         {
           headers: {
@@ -57,24 +56,30 @@ const FileUpload = ({ patientId }) => {
             );
             setUploadProgress(percentCompleted);
           },
-          timeout: 30000 // 30 second timeout
+          timeout: 30000,
         }
       );
+
+      console.log('🧾 Full Server Response:', response.data);
+
+      const extractedText = response.data.report?.extractedText;
+      console.log('🧾 Extracted Text from Server:', extractedText);
 
       setUploadResult({
         success: true,
         message: response.data.message || 'File uploaded successfully',
         textLength: response.data.report?.textLength || 0,
-        reportId: response.data.report?.id
+        reportId: response.data.report?.id,
+        extractedText: extractedText || '',
       });
+
     } catch (err) {
       let errorMessage = 'Upload failed';
-      
+
       if (err.code === 'ECONNABORTED') {
         errorMessage = 'Request timed out';
       } else if (err.response) {
-        errorMessage = err.response.data?.error || 
-                     `Server error (${err.response.status})`;
+        errorMessage = err.response.data?.error || `Server error (${err.response.status})`;
       } else if (err.request) {
         errorMessage = 'No response from server';
       } else {
@@ -99,7 +104,7 @@ const FileUpload = ({ patientId }) => {
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-xl font-semibold mb-4">Upload Medical Report</h2>
-      
+
       {/* File Input */}
       <div className="mb-4">
         <input
@@ -125,7 +130,7 @@ const FileUpload = ({ patientId }) => {
             <span className="text-sm text-gray-500 mr-3">
               {(file.size / (1024 * 1024)).toFixed(2)} MB
             </span>
-            <button 
+            <button
               onClick={resetForm}
               className="text-red-500 hover:text-red-700 text-sm"
             >
@@ -173,9 +178,13 @@ const FileUpload = ({ patientId }) => {
             Extracted {uploadResult.textLength} characters
           </p>
           {uploadResult.reportId && (
-            <p className="mt-1 text-xs">
-              Report ID: {uploadResult.reportId}
-            </p>
+            <p className="mt-1 text-xs">Report ID: {uploadResult.reportId}</p>
+          )}
+          {uploadResult.extractedText && (
+            <div className="mt-3 text-gray-700 text-sm whitespace-pre-wrap max-h-40 overflow-y-auto bg-white p-2 rounded border border-gray-200">
+              <strong>Extracted Text Preview:</strong>
+              <p className="mt-1">{uploadResult.extractedText}</p>
+            </div>
           )}
         </div>
       )}

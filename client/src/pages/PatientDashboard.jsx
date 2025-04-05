@@ -3,6 +3,7 @@ import FileUpload from '../components/FileUpload';
 import ReportCard from '../components/ReportCard';
 import ProgressChart from '../components/ProgressChart';
 import ReminderCard from '../components/ReminderCard';
+import { Link } from 'react-router-dom';
 
 const PatientDashboard = () => {
   // Sample data
@@ -49,11 +50,14 @@ const PatientDashboard = () => {
         </div>
 
         {/* Right Column */}
+        
         <div className="w-full md:w-1/3 space-y-6">
+        <Link to="/charts">
           <div className="bg-white rounded-xl shadow-md p-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Health Progress</h2>
             <ProgressChart />
           </div>
+        </Link>
 
           <div className="bg-white rounded-xl shadow-md p-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Upcoming Medications</h2>
