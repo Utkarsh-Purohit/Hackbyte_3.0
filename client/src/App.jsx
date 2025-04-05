@@ -29,7 +29,7 @@ function AppWrapper() {
             token ? <Navigate to="/patient" replace /> : <Navigate to="/login" replace />
           }
         />
-
+        <Route path="/charts" element={<Charts />} />
         <Route path="/patient" element={<PatientDashboard />} />
         <Route path="/doctor" element={<DoctorDashboard />} />
         <Route path="/reports" element={<Reports />} />
