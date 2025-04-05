@@ -1,27 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import { jwtDecode } from "jwt-decode";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [role, setRole] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("userType");
-    if (token) {
-      try {
-        // const decoded = jwtDecode(token);
-        setRole(token); // e.g., 'doctor' or 'patient'
-      } catch (error) {
-        console.log(error);
-        console.error("Invalid token");
-      }
-    }
-  }, []);
-
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    // Clear auth tokens or user state here
+    localStorage.removeItem("token"); // or however you're storing auth info
     navigate("/login");
   };
 
@@ -32,27 +18,38 @@ const Navbar = () => {
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <Link to="/">
-                <span className="text-xl font-bold">MedPal</span>
+                <span className="text-xl font-bold">HealthCompanion AI</span>
               </Link>
             </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                {role === "patient" && (
-                  <>
-                    <Link to="/patient" className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300">Dashboard</Link>
-                    <Link to="/reports" className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300">Reports</Link>
-                    <Link to="/mental-health" className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300">Mental Health</Link>
-                    <Link to="/medications" className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300">Medications</Link>
-                    <Link to="/charts" className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300">Charts</Link>
-                  </>
-                )}
-
-                {role === "doctor" && (
-                  <>
-                    <Link to="/doctor" className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300">Dashboard</Link>
-                    <Link to="/schedule" className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300">Schedule</Link>
-                  </>
-                )}
+                <Link
+                  to="/patient"
+                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to="/reports"
+                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300"
+                >
+                  Reports
+                </Link>
+                <Link
+                  to="/mental-health"
+                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300"
+                >
+                  Mental Health
+                </Link>
+                <Link
+                  to="/medications"
+                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300"
+                >
+                  Medications
+                </Link>
+                <Link to="/charts" className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300">
+                  Charts
+                </Link>
               </div>
             </div>
           </div>
@@ -70,6 +67,7 @@ const Navbar = () => {
               />
             </button>
 
+            {/* Dropdown Menu */}
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg overflow-hidden z-50">
                 <Link
