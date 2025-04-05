@@ -9,6 +9,7 @@ import Settings from './pages/Settings';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Navbar from './components/Navbar';
+import Charts from './pages/Charts';
 
 function AppWrapper() {
   const location = useLocation();
@@ -28,7 +29,7 @@ function AppWrapper() {
             token ? <Navigate to="/patient" replace /> : <Navigate to="/login" replace />
           }
         />
-
+        <Route path="/charts" element={<Charts />} />
         <Route path="/patient" element={<PatientDashboard />} />
         <Route path="/doctor" element={<DoctorDashboard />} />
         <Route path="/reports" element={<Reports />} />
