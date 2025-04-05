@@ -2,6 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+
+// Routes
+const authRoutes = require('./routes/authRoutes'); // ✅ Already imported
 const reportRoutes = require('./routes/reports');
 
 // Initialize environment variables
@@ -21,6 +24,7 @@ mongoose.connect(process.env.MONGODB_URI)
 
 // Routes
 app.use('/api/reports', reportRoutes);
+app.use('/api/auth', authRoutes); // ✅ Add this line for login/signup routes
 
 // Basic route
 app.get('/', (req, res) => {
