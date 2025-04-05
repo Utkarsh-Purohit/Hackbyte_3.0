@@ -31,16 +31,18 @@ router.post('/upload', upload.single('report'), async (req, res) => {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
+    const filePath = req.file.path;
+
     // Extract text from the file
-    const extractedText = await extractText(req.file.path);
-    console.log('Extracted text length:', extractedText.length);
+    const extractedText = await extractText(filePath);
+    console.log('🧾 Backend Extracted Text:', extractedText);
 
     // Create and save report with extracted text
     const report = new Report({
       patientId: req.body.patientId,
       filename: req.file.originalname,
-      filePath: req.file.path,
-      extractedText: extractedText, // Store the extracted text
+      filePath: filePath,
+      extractedText: extractedText,
       fileType: req.file.mimetype,
       fileSize: req.file.size
     });
@@ -53,13 +55,14 @@ router.post('/upload', upload.single('report'), async (req, res) => {
       report: {
         id: report._id,
         filename: report.filename,
-        textLength: extractedText.length
+        textLength: extractedText.length,
+        extractedText: extractedText
       }
     });
 
   } catch (err) {
-    console.error('Upload error:', err);
-    
+    console.error('❌ Upload error:', err);
+
     // Clean up uploaded file if error occurred
     if (req.file && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
