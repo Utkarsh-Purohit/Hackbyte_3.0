@@ -9,6 +9,7 @@ import Settings from './pages/Settings';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Navbar from './components/Navbar';
+import Charts from './pages/Charts';
 
 function AppWrapper() {
   const location = useLocation();

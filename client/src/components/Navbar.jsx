@@ -47,6 +47,9 @@ const Navbar = () => {
                 >
                   Medications
                 </Link>
+                <Link to="/charts" className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300">
+                  Charts
+                </Link>
               </div>
             </div>
           </div>
