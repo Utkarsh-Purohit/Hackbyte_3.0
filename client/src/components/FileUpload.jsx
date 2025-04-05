@@ -1,5 +1,7 @@
+// src/components/FileUpload.jsx
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
+import { summarizeText } from '../services/gemini';
 
 const FileUpload = ({ patientId }) => {
   const [file, setFile] = useState(null);
@@ -7,6 +9,7 @@ const FileUpload = ({ patientId }) => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadResult, setUploadResult] = useState(null);
   const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
@@ -60,17 +63,15 @@ const FileUpload = ({ patientId }) => {
         }
       );
 
-      console.log('🧾 Full Server Response:', response.data);
-
-      const extractedText = response.data.report?.extractedText;
-      console.log('🧾 Extracted Text from Server:', extractedText);
+      const extractedText = response.data.report?.extractedText || '';
+      const summary = await summarizeText(extractedText);
 
       setUploadResult({
         success: true,
         message: response.data.message || 'File uploaded successfully',
         textLength: response.data.report?.textLength || 0,
         reportId: response.data.report?.id,
-        extractedText: extractedText || '',
+        summary: summary,
       });
 
     } catch (err) {
@@ -96,6 +97,7 @@ const FileUpload = ({ patientId }) => {
     setFile(null);
     setUploadResult(null);
     setError(null);
+    setShowModal(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -105,7 +107,6 @@ const FileUpload = ({ patientId }) => {
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-xl font-semibold mb-4">Upload Medical Report</h2>
 
-      {/* File Input */}
       <div className="mb-4">
         <input
           type="file"
@@ -122,7 +123,6 @@ const FileUpload = ({ patientId }) => {
         </button>
       </div>
 
-      {/* File Info */}
       {file && (
         <div className="mb-4 p-3 bg-gray-50 rounded-md flex justify-between items-center">
           <span className="truncate">{file.name}</span>
@@ -140,7 +140,6 @@ const FileUpload = ({ patientId }) => {
         </div>
       )}
 
-      {/* Upload Button */}
       <button
         onClick={handleUpload}
         disabled={!file || isUploading}
@@ -153,7 +152,6 @@ const FileUpload = ({ patientId }) => {
         {isUploading ? `Uploading... ${uploadProgress}%` : 'Upload Report'}
       </button>
 
-      {/* Progress Bar */}
       {isUploading && (
         <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
           <div
@@ -163,14 +161,12 @@ const FileUpload = ({ patientId }) => {
         </div>
       )}
 
-      {/* Error Message */}
       {error && (
         <div className="mt-4 p-3 bg-red-50 text-red-600 rounded-md">
           {error}
         </div>
       )}
 
-      {/* Success Message */}
       {uploadResult?.success && (
         <div className="mt-4 p-3 bg-green-50 text-green-600 rounded-md">
           <p>{uploadResult.message}</p>
@@ -180,12 +176,41 @@ const FileUpload = ({ patientId }) => {
           {uploadResult.reportId && (
             <p className="mt-1 text-xs">Report ID: {uploadResult.reportId}</p>
           )}
-          {uploadResult.extractedText && (
-            <div className="mt-3 text-gray-700 text-sm whitespace-pre-wrap max-h-40 overflow-y-auto bg-white p-2 rounded border border-gray-200">
-              <strong>Extracted Text Preview:</strong>
-              <p className="mt-1">{uploadResult.extractedText}</p>
-            </div>
+
+          {uploadResult.summary && (
+            <button
+              onClick={() => setShowModal(true)}
+              className="mt-2 py-1 px-3 bg-indigo-100 text-indigo-700 text-sm rounded hover:bg-indigo-200"
+            >
+              View Analysis
+            </button>
           )}
+        </div>
+      )}
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
+            <h3 className="text-lg font-semibold mb-2">AI Report Analysis</h3>
+            <div className="text-sm text-gray-800 max-h-64 overflow-y-auto whitespace-pre-wrap">
+              {uploadResult.summary}
+            </div>
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-2 right-3 text-gray-500 hover:text-gray-700 text-xl"
+            >
+              ×
+            </button>
+            <div className="mt-4 text-right">
+              <button
+                onClick={() => setShowModal(false)}
+                className="py-1 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
