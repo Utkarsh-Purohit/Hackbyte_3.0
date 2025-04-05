@@ -4,19 +4,26 @@ const Tesseract = require('tesseract.js');
 
 module.exports.extractText = async (filePath) => {
   try {
-    // Handle PDFs
-    if (path.extname(filePath).toLowerCase() === '.pdf') {
+    // Handle PDF files
+    if (filePath.endsWith('.pdf')) {
       const dataBuffer = fs.readFileSync(filePath);
       const { text } = await pdf(dataBuffer);
-      return text;
-    } 
-    // Handle Images
+      return text.trim();
+    }
+    // Handle images (JPG/PNG)
     else {
-      const { data: { text } } = await Tesseract.recognize(filePath, 'eng');
-      return text;
+      const { data: { text } } = await Tesseract.recognize(
+        filePath,
+        'eng',
+        { 
+          logger: m => console.log(m.status),
+          tessedit_char_whitelist: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:;()-/\\% '
+        }
+      );
+      return text.trim();
     }
   } catch (err) {
     console.error('OCR Error:', err);
-    throw new Error('Failed to extract text');
+    throw new Error(`Failed to extract text: ${err.message}`);
   }
 };
