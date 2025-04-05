@@ -188,31 +188,34 @@ const FileUpload = ({ patientId }) => {
         </div>
       )}
 
-      {/* Modal */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
-            <h3 className="text-lg font-semibold mb-2">AI Report Analysis</h3>
-            <div className="text-sm text-gray-800 max-h-64 overflow-y-auto whitespace-pre-wrap">
-              {uploadResult.summary}
-            </div>
-            <button
-              onClick={() => setShowModal(false)}
-              className="absolute top-2 right-3 text-gray-500 hover:text-gray-700 text-xl"
-            >
-              ×
-            </button>
-            <div className="mt-4 text-right">
-              <button
-                onClick={() => setShowModal(false)}
-                className="py-1 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+     {/* Modal */}
+{showModal && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4 relative p-6 sm:p-8">
+      <button
+        onClick={() => setShowModal(false)}
+        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-bold"
+      >
+        &times;
+      </button>
+      <div className="mb-4">
+        <h3 className="text-2xl font-semibold text-blue-700">🧠 AI Report Analysis</h3>
+        <p className="text-sm text-gray-500 mt-1">Here’s what the AI found from your uploaded report:</p>
+      </div>
+      <div className="text-sm text-gray-800 leading-relaxed max-h-80 overflow-y-auto bg-gray-50 rounded-lg p-4 border border-gray-200 whitespace-pre-wrap">
+        {uploadResult.summary}
+      </div>
+      <div className="mt-6 flex justify-end">
+        <button
+          onClick={() => setShowModal(false)}
+          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-5 rounded-md text-sm font-medium transition-all duration-200"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 };

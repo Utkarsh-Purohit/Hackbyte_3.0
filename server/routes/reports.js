@@ -35,7 +35,6 @@ router.post('/upload', upload.single('report'), async (req, res) => {
 
     // Extract text from the file
     const extractedText = await extractText(filePath);
-    console.log('🧾 Backend Extracted Text:', extractedText);
 
     // Create and save report with extracted text
     const report = new Report({
