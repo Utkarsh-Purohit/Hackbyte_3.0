@@ -12,10 +12,19 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:5000/api/auth/login', formData);
+
+      console.log(res.data);
+
+      // ✅ Save token and userType from backend
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('userType', res.data.user.role);
+
       alert(res.data.message);
-      if (res.status === 200 && formData.role === 'patient') {
+
+      // ✅ Redirect based on actual userType returned
+      if (res.data.user.role === 'patient') {
         navigate('/patient');
-      } else if (res.status === 200 && formData.role === 'doctor') {
+      } else if (res.data.user.role === 'doctor') {
         navigate('/doctor');
       }
     } catch (err) {

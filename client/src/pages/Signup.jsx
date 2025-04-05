@@ -8,13 +8,18 @@ const Signup = () => {
     name: '', email: '', password: '', role: 'patient'
   });
 
-  const handleChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = e => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async e => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:5000/api/auth/signup', formData);
-      alert(res.data.message);
+
+      alert(res.data.message || 'Signup successful!');
+      
+      // ✅ Navigate to login on success
       if (res.status === 201) {
         navigate('/login');
       }
@@ -34,6 +39,7 @@ const Signup = () => {
               className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-400"
               name="name"
               placeholder="Your Name"
+              value={formData.name}
               onChange={handleChange}
               required
             />
@@ -46,6 +52,7 @@ const Signup = () => {
               name="email"
               type="email"
               placeholder="you@example.com"
+              value={formData.email}
               onChange={handleChange}
               required
             />
@@ -58,6 +65,7 @@ const Signup = () => {
               name="password"
               type="password"
               placeholder="••••••••"
+              value={formData.password}
               onChange={handleChange}
               required
             />
@@ -68,8 +76,8 @@ const Signup = () => {
             <select
               className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-400"
               name="role"
-              onChange={handleChange}
               value={formData.role}
+              onChange={handleChange}
             >
               <option value="patient">Patient</option>
               <option value="doctor">Doctor</option>
