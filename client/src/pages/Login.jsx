@@ -13,15 +13,19 @@ const Login = () => {
     try {
       const res = await axios.post('http://localhost:5000/api/auth/login', formData);
       alert(res.data.message);
-      if (res.status === 200 && formData.role === 'patient') {
-        navigate('/patient');
-      } else if (res.status === 200 && formData.role === 'doctor') {
-        navigate('/doctor');
+      if (res.status === 200) {
+        localStorage.setItem("role", formData.role); // 🔐 Save role
+        if (formData.role === 'patient') {
+          navigate('/patient');
+        } else {
+          navigate('/doctor');
+        }
       }
     } catch (err) {
       alert(err.response?.data?.error || 'Login failed');
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">

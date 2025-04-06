@@ -1,19 +1,26 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import PatientDashboard from './pages/PatientDashboard';
-import DoctorDashboard from './pages/DoctorDashboard';
-import Reports from './pages/Reports';
-import MentalHealth from './pages/MentalHealth';
-import Medications from './pages/Medications';
-import Settings from './pages/Settings';
-import Signup from './pages/Signup';
-import Login from './pages/Login';
-import Navbar from './components/Navbar';
-import Charts from './pages/Charts';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
+import PatientDashboard from "./pages/PatientDashboard";
+import DoctorDashboard from "./pages/DoctorDashboard";
+import Reports from "./pages/Reports";
+import MentalHealth from "./pages/MentalHealth";
+import Medications from "./pages/Medications";
+import Settings from "./pages/Settings";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
+import Navbar from "./components/Navbar";
+import Charts from "./pages/Charts";
+import Schedule from "./pages/Schedule";
 
 function AppWrapper() {
   const location = useLocation();
-  const hideNavbarRoutes = ['/login', '/signup'];
+  const hideNavbarRoutes = ["/login", "/signup"];
   const shouldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 
   const token = localStorage.getItem("token");
@@ -26,7 +33,11 @@ function AppWrapper() {
         <Route
           path="/"
           element={
-            token ? <Navigate to="/patient" replace /> : <Navigate to="/login" replace />
+            token ? (
+              <Navigate to="/patient" replace />
+            ) : (
+              <Navigate to="/login" replace />
+            )
           }
         />
         <Route path="/charts" element={<Charts />} />
@@ -38,6 +49,7 @@ function AppWrapper() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/schedule" element={<Schedule />} />
       </Routes>
     </div>
   );

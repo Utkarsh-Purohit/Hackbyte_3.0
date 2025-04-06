@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [role, setRole] = useState(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const userRole = localStorage.getItem("role");
+    setRole(userRole);
+  }, []);
+
   const handleLogout = () => {
-    // Clear auth tokens or user state here
-    localStorage.removeItem("token"); // or however you're storing auth info
+    localStorage.clear();
     navigate("/login");
   };
 
@@ -15,49 +20,75 @@ const Navbar = () => {
     <nav className="bg-indigo-600 text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
+
+          {/* Left: Logo + Links */}
           <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <Link to="/">
-                <span className="text-xl font-bold">HealthCompanion AI</span>
-              </Link>
-            </div>
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
-                <Link
-                  to="/patient"
-                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  to="/reports"
-                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300"
-                >
-                  Reports
-                </Link>
-                <Link
-                  to="/mental-health"
-                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300"
-                >
-                  Mental Health
-                </Link>
-                <Link
-                  to="/medications"
-                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300"
-                >
-                  Medications
-                </Link>
-                <Link to="/charts" className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition duration-300">
-                  Charts
-                </Link>
+            <Link to="/" className="text-xl font-bold">HealthCompanion AI</Link>
+
+            <div className="hidden md:block ml-10">
+              <div className="flex items-baseline space-x-4">
+
+                {/* Doctor View */}
+                {role === "doctor" && (
+                  <>
+                    <Link
+                      to="/doctor"
+                      className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition"
+                    >
+                      Dashboard
+                    </Link>
+                    <Link
+                      to="/schedule"
+                      className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition"
+                    >
+                      Schedule
+                    </Link>
+                  </>
+                )}
+
+                {/* Patient View */}
+                {role === "patient" && (
+                  <>
+                    <Link
+                      to="/patient"
+                      className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition"
+                    >
+                      Dashboard
+                    </Link>
+                    <Link
+                      to="/reports"
+                      className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition"
+                    >
+                      Reports
+                    </Link>
+                    <Link
+                      to="/mental-health"
+                      className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition"
+                    >
+                      Mental Health
+                    </Link>
+                    <Link
+                      to="/medications"
+                      className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition"
+                    >
+                      Medications
+                    </Link>
+                    <Link
+                      to="/charts"
+                      className="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 transition"
+                    >
+                      Charts
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>
 
-          {/* Profile Dropdown */}
+          {/* Right: Avatar Dropdown */}
           <div className="relative">
             <button
-              onClick={() => setDropdownOpen((prev) => !prev)}
+              onClick={() => setDropdownOpen(!dropdownOpen)}
               className="flex items-center focus:outline-none"
             >
               <img
@@ -67,9 +98,8 @@ const Navbar = () => {
               />
             </button>
 
-            {/* Dropdown Menu */}
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg overflow-hidden z-50">
+              <div className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg z-50">
                 <Link
                   to="/profile"
                   onClick={() => setDropdownOpen(false)}
