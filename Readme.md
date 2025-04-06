@@ -111,10 +111,3 @@ Doctors can also view summarized insights and use the platform as a productivity
 
 ---
 
-## 💻 Installation
-
-```bash
-git clone https://github.com/yourusername/ai-health-assistant.git
-cd ai-health-assistant
-npm install
-npm run dev
